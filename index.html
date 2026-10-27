@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electricity Bill Estimator & Power Consumption Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1 class="brand-title">Electricity Bill Estimator</h1>
+        <p class="brand-subtitle">Power Consumption Analyzer & Progressive Tariff Engine</p>
+      </div>
+    </div>
+
+    <div class="header-metrics">
+      <div class="header-metric-box">
+        <span class="header-metric-label">MONTHLY LOAD</span>
+        <span class="header-metric-val" id="hdr-total-kwh">0.00 kWh</span>
+      </div>
+      <div class="header-metric-box">
+        <span class="header-metric-label">ESTIMATED BILL</span>
+        <span class="header-metric-val highlight" id="hdr-total-cost">₹0.00</span>
+      </div>
+      <div id="hdr-budget-badge" class="badge badge-success">✓ Within Budget</div>
+      <div class="user-profile-badge">
+        <span class="user-role">ADMIN</span>
+        <span class="user-name">👤 Vishnuram & Vidyadharan</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tab Bar -->
+  <nav class="nav-tabs-bar">
+    <button class="nav-tab active" data-tab="tab-appliances">🔌 Appliances & Calculator</button>
+    <button class="nav-tab" data-tab="tab-bill">🧾 Progressive Slab Bill</button>
+    <button class="nav-tab" data-tab="tab-analytics">📊 Visual Analytics</button>
+    <button class="nav-tab" data-tab="tab-whatif">🔮 What-If Simulator</button>
+    <button class="nav-tab" data-tab="tab-suggestions">💡 Smart Suggestions</button>
+    <button class="nav-tab" data-tab="tab-tariff">⚙️ Tariff Configuration</button>
+    <button class="nav-tab" data-tab="tab-reports">📁 Audit & Reports</button>
+  </nav>
+
+  <!-- Main Workspace Content -->
+  <main class="main-container">
+
+    <!-- =====================================================================
+         TAB 1: APPLIANCES & CALCULATOR
+         ===================================================================== -->
+    <section id="tab-appliances" class="tab-pane active">
+      <!-- KPI Top Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-lbl">TOTAL MONTHLY UNITS</span>
+          <div class="metric-num" id="kpi-kwh">0.00 <span class="unit">kWh</span></div>
+          <span class="metric-sub" id="kpi-count-sub">10 devices tracked</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-lbl">ESTIMATED TOTAL BILL</span>
+          <div class="metric-num highlight-amber" id="kpi-bill">₹0.00</div>
+          <span class="metric-sub">Progressive slab charges + taxes</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-lbl">PEAK LOAD DEVICE</span>
+          <div class="metric-num highlight-rust" id="kpi-peak-app">-</div>
+          <span class="metric-sub" id="kpi-peak-sub">Largest energy contributor</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-lbl">DAILY AVERAGE DRAW</span>
+          <div class="metric-num highlight-sage" id="kpi-daily">0.00 <span class="unit">kWh/day</span></div>
+          <span class="metric-sub">Across active inventory</span>
+        </div>
+      </div>
+
+      <!-- Appliance Management Grid -->
+      <div class="two-col-layout">
+        <!-- Table Column -->
+        <div class="card table-card">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title">Household Appliances Inventory</h2>
+              <p class="card-subtitle">Manage power ratings, duty cycles, and operating days</p>
+            </div>
+            <div class="table-actions">
+              <button class="btn btn-secondary btn-sm" id="btn-reset-defaults">↺ Reset to 10 Defaults</button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="appliances-table">
+              <thead>
+                <tr>
+                  <th>Appliance Name</th>
+                  <th>Category</th>
+                  <th>Wattage (W)</th>
+                  <th>Qty</th>
+                  <th>Hrs/Day</th>
+                  <th>Days/Mo</th>
+                  <th>Monthly kWh</th>
+                  <th>Share (%)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appliances-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Add/Edit Form Column -->
+        <div class="card form-card">
+          <h2 class="card-title" id="form-title">Add New Appliance</h2>
+          <p class="card-subtitle">Input device characteristics for energy computation</p>
+
+          <form id="appliance-form" class="app-form">
+            <input type="hidden" id="app-id" value="">
+            
+            <div class="form-group">
+              <label for="app-name">Appliance Name</label>
+              <input type="text" id="app-name" required placeholder="e.g. 1.5 Ton Split AC">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="app-category">Category</label>
+                <select id="app-category">
+                  <option value="Cooling">Cooling (AC, Fan, Cooler)</option>
+                  <option value="Kitchen">Kitchen (Fridge, Oven, Mixer)</option>
+                  <option value="Lighting">Lighting (LED, CFL, Bulbs)</option>
+                  <option value="Entertainment">Entertainment (TV, Audio)</option>
+                  <option value="Heating">Heating (Geyser, Room Heater)</option>
+                  <option value="Cleaning">Cleaning (Washing Machine)</option>
+                  <option value="Utility">Utility (Pump, Laptop, PC)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="app-wattage">Power Rating (Watts)</label>
+                <input type="number" id="app-wattage" required min="1" step="0.5" placeholder="e.g. 1500">
+              </div>
+            </div>
+
+            <div class="form-row three-cols">
+              <div class="form-group">
+                <label for="app-qty">Quantity</label>
+                <input type="number" id="app-qty" required min="1" max="100" value="1">
+              </div>
+              <div class="form-group">
+                <label for="app-hours">Hours / Day</label>
+                <input type="number" id="app-hours" required min="0.1" max="24" step="0.5" value="8">
+              </div>
+              <div class="form-group">
+                <label for="app-days">Days / Month</label>
+                <input type="number" id="app-days" required min="1" max="31" value="30">
+              </div>
+            </div>
+
+            <div class="calc-preview-box">
+              <span>Estimated Energy:</span>
+              <strong id="form-calc-preview">360.00 kWh / month</strong>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="btn-save-app">➕ Add Appliance</button>
+              <button type="button" class="btn btn-secondary" id="btn-cancel-edit" style="display:none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 2: PROGRESSIVE SLAB BILL
+         ===================================================================== -->
+    <section id="tab-bill" class="tab-pane">
+      <div class="two-col-layout">
+        <!-- Progressive Slab Breakdown Card -->
+        <div class="card">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title">Progressive Slab Computation</h2>
+              <p class="card-subtitle">Marginal pricing distribution across tiered regulatory consumption slabs</p>
+            </div>
+            <span class="badge badge-neutral" id="tariff-badge-name">Standard Domestic Tariff</span>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Slab Tier</th>
+                  <th>Range (Units)</th>
+                  <th>Rate / Unit</th>
+                  <th>Units in Tier</th>
+                  <th>Slab Charge</th>
+                </tr>
+              </thead>
+              <tbody id="slab-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bill Synthesis & Budget Tracker Card -->
+        <div class="card">
+          <h2 class="card-title">Bill Synthesis & Budget Tracker</h2>
+          <p class="card-subtitle">Itemized invoice calculation including fixed charges and statutory taxes</p>
+
+          <div class="invoice-summary-box">
+            <div class="invoice-line">
+              <span>Energy Consumption Charges</span>
+              <strong id="inv-energy-charges">₹0.00</strong>
+            </div>
+            <div class="invoice-line">
+              <span>Fixed Meter Charges</span>
+              <strong id="inv-fixed-charges">₹80.00</strong>
+            </div>
+            <div class="invoice-line">
+              <span>Regulatory Fuel Surcharge (<span id="inv-fuel-pct">5.0</span>%)</span>
+              <strong id="inv-fuel-charge">₹0.00</strong>
+            </div>
+            <div class="invoice-line">
+              <span>Electricity Duty / Tax (<span id="inv-tax-pct">9.0</span>%)</span>
+              <strong id="inv-tax-charge">₹0.00</strong>
+            </div>
+            <div class="invoice-divider"></div>
+            <div class="invoice-line grand-total">
+              <span>TOTAL PAYABLE AMOUNT</span>
+              <strong id="inv-grand-total">₹0.00</strong>
+            </div>
+          </div>
+
+          <!-- Budget Setting & Progress -->
+          <div class="budget-panel">
+            <div class="budget-header-flex">
+              <span class="form-label">MONTHLY ELECTRICITY BUDGET</span>
+              <div class="budget-input-wrap">
+                <span>₹</span>
+                <input type="number" id="budget-input" min="500" step="100" value="3500">
+                <button class="btn btn-primary btn-sm" id="btn-update-budget">Set Budget</button>
+              </div>
+            </div>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="budget-progress-bar" style="width: 0%;"></div>
+            </div>
+
+            <div class="budget-status-row">
+              <span id="budget-status-text">Calculating budget status...</span>
+              <strong id="budget-pct-text">0.0%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 3: VISUAL ANALYTICS
+         ===================================================================== -->
+    <section id="tab-analytics" class="tab-pane">
+      <div class="analytics-grid">
+        <!-- Donut Chart: Appliance Share -->
+        <div class="card chart-card">
+          <h2 class="card-title">Appliance Share Distribution (%)</h2>
+          <p class="card-subtitle">Relative proportion of monthly energy drawn by each device</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-pie" width="400" height="280"></canvas>
+          </div>
+          <div class="chart-legend" id="pie-legend"></div>
+        </div>
+
+        <!-- Bar Chart: Category Breakdown -->
+        <div class="card chart-card">
+          <h2 class="card-title">Category-Level Power Breakdown</h2>
+          <p class="card-subtitle">Aggregated load across functional domains (Cooling, Kitchen, Lighting, etc.)</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-bar" width="400" height="280"></canvas>
+          </div>
+        </div>
+
+        <!-- Line Chart: 5-Month Historical Trend -->
+        <div class="card chart-card span-two">
+          <h2 class="card-title">5-Month Historical Consumption & Cost Trend</h2>
+          <p class="card-subtitle">Month-over-month (MoM) longitudinal comparison stored in database</p>
+          <div class="chart-wrapper">
+            <canvas id="chart-line" width="850" height="260"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 4: WHAT-IF SCENARIO SIMULATOR
+         ===================================================================== -->
+    <section id="tab-whatif" class="tab-pane">
+      <div class="two-col-layout">
+        <!-- Interactive Controls -->
+        <div class="card">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title">Virtual Simulation Sandbox</h2>
+              <p class="card-subtitle">Adjust appliance daily run-hours or toggle loads to model savings</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-reset-sim">Reset Simulator</button>
+          </div>
+
+          <div class="sim-items-list" id="sim-sliders-container">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Simulation Comparison & Delta Card -->
+        <div class="card sim-results-card">
+          <h2 class="card-title">Projected Economic Savings</h2>
+          <p class="card-subtitle">Side-by-side comparison: Baseline vs. Simulated Behavioral Changes</p>
+
+          <div class="comparison-grid">
+            <div class="comp-box">
+              <span class="comp-label">BASELINE BILL</span>
+              <div class="comp-value" id="sim-base-bill">₹0.00</div>
+              <span class="comp-sub" id="sim-base-kwh">0.0 kWh/mo</span>
+            </div>
+            <div class="comp-box highlight-box">
+              <span class="comp-label">SIMULATED BILL</span>
+              <div class="comp-value highlight-green" id="sim-new-bill">₹0.00</div>
+              <span class="comp-sub" id="sim-new-kwh">0.0 kWh/mo</span>
+            </div>
+          </div>
+
+          <div class="delta-callout-card">
+            <div class="delta-row">
+              <span>Energy Conserved (Δ kWh):</span>
+              <strong id="sim-delta-kwh" class="highlight-sage">0.00 kWh / month</strong>
+            </div>
+            <div class="delta-row">
+              <span>Monthly Cash Savings (Δ ₹):</span>
+              <strong id="sim-delta-cash" class="highlight-amber">₹0.00 / month</strong>
+            </div>
+            <div class="delta-row">
+              <span>Annualized Financial Return:</span>
+              <strong id="sim-delta-annual" class="highlight-green">₹0.00 / year</strong>
+            </div>
+          </div>
+
+          <div class="sim-action-box">
+            <p class="sim-info-txt">Adopting these settings will update your active appliance database records permanently.</p>
+            <button class="btn btn-success" id="btn-apply-sim">✓ Apply Simulated Settings to Live Database</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 5: SMART SUGGESTIONS
+         ===================================================================== -->
+    <section id="tab-suggestions" class="tab-pane">
+      <div class="suggestions-container">
+        <div class="card-header-flex" style="margin-bottom: 20px;">
+          <div>
+            <h2 class="card-title">Rule-Based Energy Intelligence & Smart Advisory</h2>
+            <p class="card-subtitle">Automated recommendations evaluated from your appliance consumption patterns</p>
+          </div>
+        </div>
+
+        <div class="suggestions-grid" id="suggestions-cards-grid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 6: TARIFF CONFIGURATION
+         ===================================================================== -->
+    <section id="tab-tariff" class="tab-pane">
+      <div class="two-col-layout">
+        <!-- Slab Editor -->
+        <div class="card">
+          <div class="card-header-flex">
+            <div>
+              <h2 class="card-title">Progressive Slabs Management</h2>
+              <p class="card-subtitle">Configure thresholds and unit rates loaded from tariff.json</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-reset-tariff">Restore Standard Tariff</button>
+          </div>
+
+          <table class="data-table" id="tariff-edit-table">
+            <thead>
+              <tr>
+                <th>Tier Label</th>
+                <th>Min Units</th>
+                <th>Max Units</th>
+                <th>Rate (₹/unit)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tariff-edit-tbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+
+          <div class="add-slab-row" style="margin-top: 15px;">
+            <button class="btn btn-secondary btn-sm" id="btn-add-slab">+ Add New Slab Tier</button>
+          </div>
+        </div>
+
+        <!-- Surcharges & Tax Editor -->
+        <div class="card">
+          <h2 class="card-title">Surcharges & Statutory Tax Rates</h2>
+          <p class="card-subtitle">Fixed meter infrastructure charges and state regulatory percentages</p>
+
+          <form id="tariff-rates-form" class="app-form">
+            <div class="form-group">
+              <label for="tf-name">Tariff Scheme Name</label>
+              <input type="text" id="tf-name" value="Standard Domestic Progressive Tariff">
+            </div>
+
+            <div class="form-group">
+              <label for="tf-currency">Currency Symbol</label>
+              <input type="text" id="tf-currency" value="₹" style="max-width: 100px;">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tf-fixed">Fixed Meter Charge (₹/mo)</label>
+                <input type="number" id="tf-fixed" step="5" value="80.0">
+              </div>
+
+              <div class="form-group">
+                <label for="tf-fuel">Fuel Adjustment Surcharge (%)</label>
+                <input type="number" id="tf-fuel" step="0.5" value="5.0">
+              </div>
+
+              <div class="form-group">
+                <label for="tf-tax">State Tax / VAT (%)</label>
+                <input type="number" id="tf-tax" step="0.5" value="9.0">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-save-tariff">💾 Save Tariff Settings</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 7: AUDIT & REPORTS
+         ===================================================================== -->
+    <section id="tab-reports" class="tab-pane">
+      <div class="reports-grid">
+        <div class="card report-box">
+          <div class="report-icon">📊</div>
+          <h2 class="card-title">Download Tabular CSV Audit</h2>
+          <p class="card-subtitle">Export granular device-by-device audit data formatted for Microsoft Excel and spreadsheet tools.</p>
+          <button class="btn btn-primary" id="btn-export-csv">📥 Download CSV Report</button>
+        </div>
+
+        <div class="card report-box">
+          <div class="report-icon">📑</div>
+          <h2 class="card-title">Download PDF Presentation</h2>
+          <p class="card-subtitle">Access the publication-quality 18-slide project presentation in the White and Beige theme.</p>
+          <a class="btn btn-primary" href="/Electricity_Bill_Estimator_Presentation.pdf" target="_blank" download>📄 Download PDF Deck</a>
+        </div>
+
+        <div class="card report-box">
+          <div class="report-icon">💾</div>
+          <h2 class="card-title">Save Monthly Usage Snapshot</h2>
+          <p class="card-subtitle">Freeze current calculated month consumption into SQLite database history archive.</p>
+          <button class="btn btn-success" id="btn-snapshot-month">📌 Freeze Current Month Snapshot</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Electricity Bill Estimator & Power Consumption Analyzer • Easwari Engineering College • Department of Artificial Intelligence & Data Science</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
