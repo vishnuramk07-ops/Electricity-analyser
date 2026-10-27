@@ -12,13 +12,13 @@
 <body>
   <!-- Top App Header -->
   <header class="app-header">
-    <div class="header-brand">
+    <a href="index.html" class="header-brand" id="brand-logo" title="Electricity Bill Estimator - Return to Main Page">
       <div class="brand-icon">⚡</div>
       <div>
         <h1 class="brand-title">Electricity Bill Estimator</h1>
         <p class="brand-subtitle">Power Consumption Analyzer & Progressive Tariff Engine</p>
       </div>
-    </div>
+    </a>
 
     <div class="header-metrics">
       <div class="header-metric-box">
@@ -30,10 +30,14 @@
         <span class="header-metric-val highlight" id="hdr-total-cost">₹0.00</span>
       </div>
       <div id="hdr-budget-badge" class="badge badge-success">✓ Within Budget</div>
-      <div class="user-profile-badge">
-        <span class="user-role">ADMIN</span>
-        <span class="user-name">👤 Vishnuram & Vidyadharan</span>
+      <div class="user-profile-badge" id="user-badge">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="user-role" id="hdr-user-role">ADMIN</span>
+          <a href="login.html" id="btn-switch-user" title="Switch User or Log In" style="font-size: 11px; text-decoration: none; color: var(--accent-amber); font-weight: 700;">(Switch)</a>
+        </div>
+        <span class="user-name" id="hdr-user-name">👤 Vishnuram & Vidyadharan</span>
       </div>
+      <a href="login.html" class="btn btn-secondary btn-sm" id="btn-nav-login" title="Go to Login Page">🔐 Log In</a>
     </div>
   </header>
 
@@ -454,28 +458,60 @@
     <!-- =====================================================================
          TAB 7: AUDIT & REPORTS
          ===================================================================== -->
+    <!-- =====================================================================
+         TAB 7: AUDIT & REPORTS
+         ===================================================================== -->
     <section id="tab-reports" class="tab-pane">
       <div class="reports-grid">
+        
+        <!-- Primary Audit Report PDF (All Features) -->
+        <div class="card report-box" style="border: 2px solid var(--accent-amber);">
+          <div class="report-icon">📑</div>
+          <div class="badge badge-success" style="margin-bottom: 8px;">ALL FEATURES INCLUDED</div>
+          <h2 class="card-title">Comprehensive Audit Report (PDF)</h2>
+          <p class="card-subtitle">Official 3-page publication-grade PDF report: appliance inventory, progressive slab bill breakdown, category analysis, What-If simulation, and heuristic recommendations.</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: auto;">
+            <a class="btn btn-primary" href="Electricity_Bill_Audit_Full_Report.pdf" download="Electricity_Bill_Audit_Full_Report.pdf" target="_blank" id="btn-download-audit-pdf">📥 Download Audit PDF</a>
+            <button class="btn btn-secondary" id="btn-print-live-report">🖨️ View & Print Live Report</button>
+          </div>
+        </div>
+
+        <!-- 30-Page Technical Project Report -->
+        <div class="card report-box">
+          <div class="report-icon">📚</div>
+          <span class="badge badge-neutral" style="margin-bottom: 8px;">ACADEMIC REPORT</span>
+          <h2 class="card-title">30-Page Project Report (PDF)</h2>
+          <p class="card-subtitle">Comprehensive technical documentation detailing MVC architecture, mathematical modeling, progressive tariff algorithms, and system architecture.</p>
+          <a class="btn btn-primary" href="Electricity_Bill_Estimator_30_Page_Project_Report.pdf" download="Electricity_Bill_Estimator_30_Page_Project_Report.pdf" target="_blank" style="margin-top: auto;">📖 Download 30-Page Report</a>
+        </div>
+
+        <!-- 18-Slide Presentation Deck -->
+        <div class="card report-box">
+          <div class="report-icon">📽️</div>
+          <span class="badge badge-neutral" style="margin-bottom: 8px;">SLIDE DECK</span>
+          <h2 class="card-title">Project Presentation (PDF)</h2>
+          <p class="card-subtitle">Publication-quality 18-slide executive presentation formatted in 16:9 widescreen with the signature White and Beige editorial theme.</p>
+          <a class="btn btn-primary" href="Electricity_Bill_Estimator_Presentation.pdf" download="Electricity_Bill_Estimator_Presentation.pdf" target="_blank" style="margin-top: auto;">📄 Download Presentation Deck</a>
+        </div>
+
+        <!-- Tabular CSV Export -->
         <div class="card report-box">
           <div class="report-icon">📊</div>
-          <h2 class="card-title">Download Tabular CSV Audit</h2>
-          <p class="card-subtitle">Export granular device-by-device audit data formatted for Microsoft Excel and spreadsheet tools.</p>
-          <button class="btn btn-primary" id="btn-export-csv">📥 Download CSV Report</button>
+          <span class="badge badge-neutral" style="margin-bottom: 8px;">SPREADSHEET</span>
+          <h2 class="card-title">Tabular CSV Audit (Excel)</h2>
+          <p class="card-subtitle">Export granular device-by-device audit data formatted for Microsoft Excel, Google Sheets, and quantitative modeling.</p>
+          <button class="btn btn-secondary" id="btn-export-csv" style="margin-top: auto;">📥 Download CSV Report</button>
         </div>
 
-        <div class="card report-box">
-          <div class="report-icon">📑</div>
-          <h2 class="card-title">Download PDF Presentation</h2>
-          <p class="card-subtitle">Access the publication-quality 18-slide project presentation in the White and Beige theme.</p>
-          <a class="btn btn-primary" href="/Electricity_Bill_Estimator_Presentation.pdf" target="_blank" download>📄 Download PDF Deck</a>
-        </div>
-
+        <!-- Database History Snapshot -->
         <div class="card report-box">
           <div class="report-icon">💾</div>
-          <h2 class="card-title">Save Monthly Usage Snapshot</h2>
-          <p class="card-subtitle">Freeze current calculated month consumption into SQLite database history archive.</p>
-          <button class="btn btn-success" id="btn-snapshot-month">📌 Freeze Current Month Snapshot</button>
+          <span class="badge badge-neutral" style="margin-bottom: 8px;">ARCHIVE</span>
+          <h2 class="card-title">Save Usage Snapshot</h2>
+          <p class="card-subtitle">Freeze current calculated month consumption into the historical database for longitudinal trend analysis.</p>
+          <button class="btn btn-success" id="btn-snapshot-month" style="margin-top: auto;">📌 Freeze Month Snapshot</button>
         </div>
+
       </div>
     </section>
 

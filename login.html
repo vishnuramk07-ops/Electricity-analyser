@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login • Electricity Bill Estimator & Power Consumption Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-page-body">
+
+  <!-- Top App Header with Clickable Logo -->
+  <header class="app-header">
+    <a href="index.html" class="header-brand" id="header-brand-logo" title="Click logo to return to main page">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1 class="brand-title">Electricity Bill Estimator</h1>
+        <p class="brand-subtitle">Power Consumption Analyzer & Progressive Tariff Engine</p>
+      </div>
+    </a>
+
+    <div class="header-metrics">
+      <a href="index.html" class="btn btn-secondary btn-sm" id="btn-header-return" title="Return to Main Dashboard">
+        🏠 Return to Main Page
+      </a>
+    </div>
+  </header>
+
+  <!-- Login Main Content -->
+  <main class="login-wrapper">
+    <div class="login-card">
+
+      <!-- Interactive Logo that explicitly returns to Main Page -->
+      <a href="index.html" class="login-logo-link" id="center-brand-logo" title="Click logo to return to main page">
+        <div class="brand-icon">⚡</div>
+        <div class="login-logo-text">
+          <div class="brand-title" style="font-size: 22px;">Electricity Bill Estimator</div>
+          <span class="logo-back-tag">⮌ Click Logo to Return to Main Page</span>
+        </div>
+      </a>
+
+      <h2 class="login-header-title">Sign In to Your Account</h2>
+      <p class="login-header-desc">Manage appliance loads, calculate tiered slab bills, and optimize household power consumption.</p>
+
+      <div class="login-tip-banner">
+        <span>⚡</span>
+        <span>Quick return: Click the <strong>⚡ Logo</strong> above or at the top left to return to the main page at any time.</span>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="login-user">Consumer No. / Email ID</label>
+          <div class="login-input-wrap">
+            <input type="text" id="login-user" required placeholder="e.g. EB-2026-9481 or user@powercalc.org" value="EB-2026-9481" autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-pass">Account Password</label>
+          <div class="login-input-wrap">
+            <input type="password" id="login-pass" required placeholder="••••••••" value="password123" autocomplete="current-password">
+            <button type="button" class="pwd-toggle-btn" id="btn-toggle-pwd" title="Show / Hide Password">👁️</button>
+          </div>
+        </div>
+
+        <div class="login-options-row">
+          <label class="remember-label">
+            <input type="checkbox" id="login-remember" checked>
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" id="link-forgot">Forgot details?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-login-submit" id="btn-submit-login">
+          🔐 Sign In to Dashboard
+        </button>
+
+        <div id="login-status-alert" class="login-status-msg"></div>
+      </form>
+
+      <!-- Quick 1-Click Demo Profiles -->
+      <div class="divider-or">
+        <span>OR 1-CLICK QUICK ACCESS</span>
+      </div>
+
+      <div class="quick-demo-accounts">
+        <button type="button" class="quick-login-btn" data-role="ADMIN" data-name="Vishnuram & Vidyadharan">
+          <div class="quick-login-info">
+            <span class="quick-login-role">⚡ Administrator Account</span>
+            <span class="quick-login-name">👤 Vishnuram & Vidyadharan • Full Access</span>
+          </div>
+          <span class="quick-login-arrow">Log In →</span>
+        </button>
+
+        <button type="button" class="quick-login-btn" data-role="CONSUMER" data-name="Priya Sharma (Consumer)">
+          <div class="quick-login-info">
+            <span class="quick-login-role">🏠 Residential Consumer</span>
+            <span class="quick-login-name">👤 Priya Sharma • Domestic Tariff Tier</span>
+          </div>
+          <span class="quick-login-arrow">Log In →</span>
+        </button>
+      </div>
+
+      <div class="login-footer-nav">
+        <a href="index.html" id="link-footer-return">
+          ← Return to Main Electricity Estimator
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <p>Electricity Bill Estimator & Power Consumption Analyzer • Easwari Engineering College • Department of Artificial Intelligence & Data Science</p>
+  </footer>
+
+  <script>
+    // Toggle Password Visibility
+    const pwdInput = document.getElementById('login-pass');
+    const pwdToggle = document.getElementById('btn-toggle-pwd');
+    pwdToggle.addEventListener('click', () => {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        pwdToggle.textContent = '🙈';
+      } else {
+        pwdInput.type = 'password';
+        pwdToggle.textContent = '👁️';
+      }
+    });
+
+    // Forgot password alert
+    document.getElementById('link-forgot').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Demo Credentials:\n\nUsername: EB-2026-9481 (or click either Quick Access button below)\nPassword: password123');
+    });
+
+    const statusAlert = document.getElementById('login-status-alert');
+
+    function performLogin(name, role) {
+      statusAlert.className = 'login-status-msg success';
+      statusAlert.textContent = `✓ Authenticated as ${name} (${role})! Returning to dashboard...`;
+      
+      const userData = {
+        name: name,
+        role: role,
+        loggedInAt: new Date().toISOString()
+      };
+      localStorage.setItem('powercalc_user', JSON.stringify(userData));
+
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 400);
+    }
+
+    // Submit handler
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value.trim();
+
+      if (!user || !pass) {
+        statusAlert.className = 'login-status-msg error';
+        statusAlert.textContent = 'Please provide both username and password.';
+        return;
+      }
+
+      // Check if admin or default
+      const role = user.toLowerCase().includes('admin') ? 'ADMIN' : 'CONSUMER';
+      const displayName = user.includes('@') ? user.split('@')[0] : (user === 'EB-2026-9481' ? 'Vishnuram & Vidyadharan' : user);
+      
+      performLogin(displayName, role);
+    });
+
+    // Quick demo buttons
+    document.querySelectorAll('.quick-login-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const role = btn.getAttribute('data-role');
+        const name = btn.getAttribute('data-name');
+        performLogin(name, role);
+      });
+    });
+  </script>
+</body>
+</html>
